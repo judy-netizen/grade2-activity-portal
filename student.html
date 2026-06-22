@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Activities</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="student-page">
+
+<header class="topbar">
+  <a href="index.html" class="back-btn">← Home</a>
+  <div class="topbar-title">🎒 My Activities</div>
+  <div id="student-name-label" class="topbar-name"></div>
+</header>
+
+<div class="page-wrap">
+  <div class="subject-tabs">
+    <button class="stab active" data-s="eng" onclick="showSubject('eng',this)">📖 English</button>
+    <button class="stab" data-s="math" onclick="showSubject('math',this)">🔢 Math</button>
+    <button class="stab" data-s="fil" onclick="showSubject('fil',this)">🇵🇭 Filipino</button>
+    <button class="stab" data-s="spell" onclick="showSubject('spell',this)">✏️ Spelling</button>
+  </div>
+
+  <div class="score-banner">
+    <div class="score-pill" id="banner-eng">📖 English <span id="sc-eng">–</span></div>
+    <div class="score-pill" id="banner-math">🔢 Math <span id="sc-math">–</span></div>
+    <div class="score-pill" id="banner-fil">🇵🇭 Filipino <span id="sc-fil">–</span></div>
+    <div class="score-pill" id="banner-spell">✏️ Spelling <span id="sc-spell">–</span></div>
+  </div>
+
+  <!-- ENGLISH -->
+  <div id="eng-section" class="section">
+    <div class="act-card">
+      <div class="act-header"><span class="tag blue">English</span> Reading & Comprehension</div>
+      <div class="story-box">
+        🌳 <strong>The Big Tree</strong><br><br>
+        Mia lives near a big tree in her backyard. Every morning, she sees birds singing in its branches. One day, a little cat got stuck up in the tree. Mia called her father for help. Her father climbed up and saved the cat. The cat purred with joy. Mia gave it some milk.
+      </div>
+      <div class="q-block" id="eq1">
+        <div class="q-text">1. Where does Mia live?</div>
+        <div class="opts">
+          <div class="opt" onclick="pickMC(this,'eq1',0)">Near a big tree in her backyard</div>
+          <div class="opt" onclick="pickMC(this,'eq1',1)">In a farm far away</div>
+          <div class="opt" onclick="pickMC(this,'eq1',2)">Near a river</div>
+        </div>
+      </div>
+      <div class="q-block" id="eq2">
+        <div class="q-text">2. Who helped Mia save the cat?</div>
+        <div class="opts">
+          <div class="opt" onclick="pickMC(this,'eq2',0)">Her mother</div>
+          <div class="opt" onclick="pickMC(this,'eq2',1)">Her brother</div>
+          <div class="opt" onclick="pickMC(this,'eq2',2)">Her father</div>
+        </div>
+      </div>
+      <div class="q-block" id="eq3">
+        <div class="q-text">3. What did the cat do after it was saved?</div>
+        <div class="opts">
+          <div class="opt" onclick="pickMC(this,'eq3',0)">It ran away</div>
+          <div class="opt" onclick="pickMC(this,'eq3',1)">It purred with joy</div>
+          <div class="opt" onclick="pickMC(this,'eq3',2)">It climbed higher</div>
+        </div>
+      </div>
+      <button class="submit-btn" onclick="submitEng()">Submit English ✓</button>
+      <div class="feedback-box" id="eng-fb"></div>
+    </div>
+
+    <div class="act-card">
+      <div class="act-header"><span class="tag blue">English</span> Fill in the Blank</div>
+      <div class="word-bank" id="word-bank">
+        <span class="word-chip" id="wc-fly" onclick="selectWord('fly')">fly</span>
+        <span class="word-chip" id="wc-bark" onclick="selectWord('bark')">bark</span>
+        <span class="word-chip" id="wc-hop" onclick="selectWord('hop')">hop</span>
+        <span class="word-chip" id="wc-swim" onclick="selectWord('swim')">swim</span>
+      </div>
+      <div class="fill-sentences">
+        <p>1. Birds can <span class="fill-slot" id="fs1" onclick="fillSlot('fs1')"></span> in the sky.</p>
+        <p>2. Dogs <span class="fill-slot" id="fs2" onclick="fillSlot('fs2')"></span> when they are happy.</p>
+        <p>3. Frogs <span class="fill-slot" id="fs3" onclick="fillSlot('fs3')"></span> from place to place.</p>
+        <p>4. Fish love to <span class="fill-slot" id="fs4" onclick="fillSlot('fs4')"></span> in the water.</p>
+      </div>
+      <button class="submit-btn" onclick="submitFill()">Check answers ✓</button>
+      <div class="feedback-box" id="fill-fb"></div>
+    </div>
+  </div>
+
+  <!-- MATH -->
+  <div id="math-section" class="section hidden">
+    <div class="act-card">
+      <div class="act-header"><span class="tag green">Math</span> Word Problems</div>
+      <div id="math-qs"></div>
+      <button class="submit-btn" onclick="submitMath()">Submit Math ✓</button>
+      <div class="feedback-box" id="math-fb"></div>
+    </div>
+    <div class="act-card">
+      <div class="act-header"><span class="tag green">Math</span> Count the Animals 🐾</div>
+      <p class="act-instruction">Tap animals to count them!</p>
+      <div class="animal-grid" id="animal-grid"></div>
+      <div class="count-display">Total: <strong id="animal-total">0</strong></div>
+    </div>
+  </div>
+
+  <!-- FILIPINO -->
+  <div id="fil-section" class="section hidden">
+    <div class="act-card">
+      <div class="act-header"><span class="tag pink">Filipino</span> Pangalan ng Hayop</div>
+      <p class="act-instruction">Piliin ang tamang Filipino na pangalan para sa bawat hayop.</p>
+      <div id="fil-qs"></div>
+      <button class="submit-btn" onclick="submitFil()">Suriin ang sagot ✓</button>
+      <div class="feedback-box" id="fil-fb"></div>
+    </div>
+    <div class="act-card">
+      <div class="act-header"><span class="tag pink">Filipino</span> Pamilya Ko</div>
+      <div id="fam-qs"></div>
+      <div class="feedback-box" id="fam-fb"></div>
+    </div>
+  </div>
+
+  <!-- SPELLING -->
+  <div id="spell-section" class="section hidden">
+    <div class="act-card">
+      <div class="act-header"><span class="tag amber">Spelling</span> Spell the Word</div>
+      <p class="act-instruction">Look at the clue and type the correct spelling.</p>
+      <div id="spell-qs"></div>
+      <button class="submit-btn" onclick="submitSpell()">Check spelling ✓</button>
+      <div class="feedback-box" id="spell-fb"></div>
+    </div>
+    <div class="act-card">
+      <div class="act-header"><span class="tag amber">Spelling</span> Unscramble</div>
+      <div id="scram-qs"></div>
+      <button class="submit-btn" onclick="submitScram()">Check ✓</button>
+      <div class="feedback-box" id="scram-fb"></div>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+var engAnswers = {eq1:0, eq2:2, eq3:1};
+var engPicked = {};
+var fillCorrect = {fs1:'fly', fs2:'bark', fs3:'hop', fs4:'swim'};
+var fillSlots = {};
+var activeWord = null;
+
+var mathQs = [
+  {q:'🌳 7 birds are in a tree. 3 more come. How many total?', a:10},
+  {q:'🍎 A family has 12 apples. They eat 5. How many are left?', a:7},
+  {q:'🌼 Mia picks 4 flowers in the morning and 6 in the afternoon. How many total?', a:10},
+  {q:'🐟 15 fish in a pond. 8 swim away. How many remain?', a:7}
+];
+
+var filQs = [
+  {emoji:'🐶', q:'Ano ang tawag sa aso sa Filipino?', opts:['Pusa','Aso','Ibon'], a:1},
+  {emoji:'🐱', q:'Ano ang tawag sa pusa?', opts:['Pusa','Palaka','Isda'], a:0},
+  {emoji:'🐦', q:'Ano ang tawag sa ibon?', opts:['Aso','Mariposa','Ibon'], a:2},
+  {emoji:'🐟', q:'Ano ang tawag sa isda?', opts:['Isda','Pusa','Palaka'], a:0}
+];
+var filPicked = {};
+
+var famQs = [
+  {img:'👨', q:'Sino ang lalaki sa pamilya?', opts:['Tatay','Nanay','Lola'], a:0},
+  {img:'👩', q:'Sino ang babae sa pamilya?', opts:['Tatay','Nanay','Tito'], a:1},
+  {img:'👴', q:'Ang lolo ay ang _____ ng tatay.', opts:['anak','ama','kapatid'], a:1}
+];
+var famPicked = {};
+
+var spellWords = [
+  {clue:'🐘', hint:'Big gray animal with a long nose', answer:'elephant'},
+  {clue:'🌳', hint:'Has roots, trunk and leaves', answer:'tree'},
+  {clue:'👨‍👩‍👧', hint:'Mom, dad and children together', answer:'family'},
+  {clue:'🌧️', hint:'Water that falls from clouds', answer:'rain'}
+];
+
+var scrambles = [
+  {shuffled:'GFRO', answer:'FROG', hint:'🐸 A green jumping animal'},
+  {shuffled:'NUSS', answer:'SUNS', hint:'☀️ More than one sun'},
+  {shuffled:'MHEO', answer:'HOME', hint:'🏠 Where your family lives'},
+  {shuffled:'RIBD', answer:'BIRD', hint:'🐦 An animal that can fly'}
+];
+
+document.getElementById('student-name-label').textContent =
+  localStorage.getItem('studentName') || 'Student';
+
+function showSubject(s, btn) {
+  document.querySelectorAll('.section').forEach(function(el) { el.classList.add('hidden'); });
+  document.getElementById(s + '-section').classList.remove('hidden');
+  document.querySelectorAll('.stab').forEach(function(el) { el.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+function pickMC(el, qid, idx) {
+  var correct = engAnswers[qid];
+  var opts = el.parentElement.querySelectorAll('.opt');
+  opts.forEach(function(o) { o.className = 'opt'; });
+  if (idx === correct) { el.classList.add('correct'); engPicked[qid] = true; }
+  else { el.classList.add('wrong'); opts[correct].classList.add('correct'); engPicked[qid] = false; }
+}
+
+function submitEng() {
+  var sc = Object.values(engPicked).filter(Boolean).length;
+  var total = Object.keys(engAnswers).length;
+  showFeedback('eng-fb', sc, total);
+  saveScore('eng', sc, total);
+}
+
+function selectWord(w) {
+  var chip = document.getElementById('wc-' + w);
+  if (chip.classList.contains('used')) return;
+  document.querySelectorAll('.word-chip').forEach(function(c) { c.classList.remove('selected'); });
+  chip.classList.add('selected');
+  activeWord = w;
+}
+
+function fillSlot(sid) {
+  var slot = document.getElementById(sid);
+  if (slot.textContent && slot.textContent !== '') {
+    var prev = slot.textContent;
+    var chip = document.getElementById('wc-' + prev);
+    if (chip) { chip.classList.remove('used', 'selected'); }
+    slot.textContent = '';
+    slot.classList.remove('filled');
+    delete fillSlots[sid];
+  } else if (activeWord) {
+    slot.textContent = activeWord;
+    slot.classList.add('filled');
+    document.getElementById('wc-' + activeWord).classList.add('used');
+    document.getElementById('wc-' + activeWord).classList.remove('selected');
+    fillSlots[sid] = activeWord;
+    activeWord = null;
+  }
+}
+
+function submitFill() {
+  var sc = 0, total = Object.keys(fillCorrect).length;
+  for (var s in fillCorrect) {
+    var slot = document.getElementById(s);
+    if (fillSlots[s] === fillCorrect[s]) { sc++; slot.style.borderColor = '#3B6D11'; slot.style.color = '#27500A'; }
+    else { slot.style.borderColor = '#A32D2D'; slot.style.color = '#791F1F'; }
+  }
+  showFeedback('fill-fb', sc, total);
+}
+
+function buildMath() {
+  var html = '';
+  mathQs.forEach(function(mq, i) {
+    html += '<div class="q-block"><div class="q-text">' + mq.q + '</div>' +
+      '<input class="num-input" type="number" id="mq' + i + '" placeholder="?" min="0"></div>';
+  });
+  document.getElementById('math-qs').innerHTML = html;
+}
+
+function submitMath() {
+  var sc = 0;
+  mathQs.forEach(function(mq, i) {
+    var inp = document.getElementById('mq' + i);
+    if (parseInt(inp.value) === mq.a) { sc++; inp.classList.add('correct-inp'); }
+    else { inp.classList.add('wrong-inp'); }
+  });
+  showFeedback('math-fb', sc, mathQs.length);
+  saveScore('math', sc, mathQs.length);
+}
+
+var animalSel = {};
+function buildAnimals() {
+  var animals = ['🐶','🐱','🐦','🐟','🐸','🦋','🐘','🐰'];
+  var html = '';
+  animals.forEach(function(a, i) {
+    html += '<div class="animal-btn" id="ab' + i + '" onclick="toggleAnimal(' + i + ')">' + a + '</div>';
+  });
+  document.getElementById('animal-grid').innerHTML = html;
+}
+function toggleAnimal(i) {
+  var el = document.getElementById('ab' + i);
+  if (animalSel[i]) { delete animalSel[i]; el.classList.remove('selected'); }
+  else { animalSel[i] = 1; el.classList.add('selected'); }
+  document.getElementById('animal-total').textContent = Object.keys(animalSel).length;
+}
+
+function buildFil() {
+  var html = '';
+  filQs.forEach(function(fq, i) {
+    html += '<div class="q-block"><div class="q-text">' + fq.emoji + ' ' + fq.q + '</div><div class="opts">';
+    fq.opts.forEach(function(opt, j) {
+      html += '<div class="opt" onclick="pickFil(this,' + i + ',' + j + ')">' + opt + '</div>';
+    });
+    html += '</div></div>';
+  });
+  document.getElementById('fil-qs').innerHTML = html;
+}
+function pickFil(el, qi, oi) {
+  var opts = el.parentElement.querySelectorAll('.opt');
+  opts.forEach(function(o) { o.className = 'opt'; });
+  if (oi === filQs[qi].a) { el.classList.add('correct'); filPicked[qi] = true; }
+  else { el.classList.add('wrong'); opts[filQs[qi].a].classList.add('correct'); filPicked[qi] = false; }
+}
+function submitFil() {
+  var sc = Object.values(filPicked).filter(Boolean).length;
+  showFeedback('fil-fb', sc, filQs.length);
+  saveScore('fil', sc, filQs.length);
+}
+
+function buildFam() {
+  var html = '';
+  famQs.forEach(function(fq, i) {
+    html += '<div class="q-block"><div class="q-text">' + fq.img + ' ' + fq.q + '</div><div class="opts">';
+    fq.opts.forEach(function(opt, j) {
+      html += '<div class="opt" onclick="pickFam(this,' + i + ',' + j + ')">' + opt + '</div>';
+    });
+    html += '</div></div>';
+  });
+  document.getElementById('fam-qs').innerHTML = html;
+}
+function pickFam(el, qi, oi) {
+  var opts = el.parentElement.querySelectorAll('.opt');
+  opts.forEach(function(o) { o.className = 'opt'; });
+  if (oi === famQs[qi].a) { el.classList.add('correct'); famPicked[qi] = true; }
+  else { el.classList.add('wrong'); opts[famQs[qi].a].classList.add('correct'); famPicked[qi] = false; }
+  if (Object.keys(famPicked).length === famQs.length) {
+    var sc = Object.values(famPicked).filter(Boolean).length;
+    showFeedback('fam-fb', sc, famQs.length);
+  }
+}
+
+function buildSpell() {
+  var html = '';
+  spellWords.forEach(function(sw, i) {
+    html += '<div class="q-block"><div class="q-text">' + sw.clue + ' ' + sw.hint + '</div>' +
+      '<input class="text-input" id="sw' + i + '" placeholder="Type here..." autocomplete="off"></div>';
+  });
+  document.getElementById('spell-qs').innerHTML = html;
+}
+function submitSpell() {
+  var sc = 0;
+  spellWords.forEach(function(sw, i) {
+    var inp = document.getElementById('sw' + i);
+    if (inp.value.trim().toLowerCase() === sw.answer) { sc++; inp.classList.add('correct-inp'); }
+    else { inp.classList.add('wrong-inp'); }
+  });
+  showFeedback('spell-fb', sc, spellWords.length);
+  saveScore('spell', sc, spellWords.length);
+}
+
+function buildScram() {
+  var html = '';
+  scrambles.forEach(function(sc, i) {
+    html += '<div class="q-block"><div class="q-text">' + sc.hint + '</div>' +
+      '<div class="scramble-letters">' + sc.shuffled + '</div>' +
+      '<input class="text-input upper" id="scr' + i + '" placeholder="Unscramble..." autocomplete="off"></div>';
+  });
+  document.getElementById('scram-qs').innerHTML = html;
+}
+function submitScram() {
+  var sc = 0;
+  scrambles.forEach(function(s, i) {
+    var inp = document.getElementById('scr' + i);
+    if (inp.value.trim().toUpperCase() === s.answer) { sc++; inp.classList.add('correct-inp'); }
+    else { inp.classList.add('wrong-inp'); }
+  });
+  showFeedback('scram-fb', sc, scrambles.length);
+  saveScore('spell', Math.round(sc), scrambles.length);
+}
+
+buildMath(); buildAnimals(); buildFil(); buildFam(); buildSpell(); buildScram();
+loadScoreBanner();
+</script>
+</body>
+</html>
