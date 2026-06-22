@@ -11,7 +11,6 @@
   <div class="login-logo">🎒</div>
   <h1>Grade 2 Activity Portal</h1>
   <p class="login-sub">English · Math · Filipino · Spelling</p>
-
   <div class="login-cards">
     <div class="login-card student-card" onclick="goStudent()">
       <div class="login-card-icon">🌟</div>
@@ -24,15 +23,12 @@
       <div class="login-card-sub">View progress</div>
     </div>
   </div>
-
   <div id="pin-modal" class="pin-modal hidden">
     <div class="pin-box">
       <div class="pin-title">Enter Parent PIN</div>
       <div class="pin-dots">
-        <span class="pin-dot" id="d0"></span>
-        <span class="pin-dot" id="d1"></span>
-        <span class="pin-dot" id="d2"></span>
-        <span class="pin-dot" id="d3"></span>
+        <span class="pin-dot" id="d0"></span><span class="pin-dot" id="d1"></span>
+        <span class="pin-dot" id="d2"></span><span class="pin-dot" id="d3"></span>
       </div>
       <div class="pin-pad">
         <button onclick="pinKey('1')">1</button><button onclick="pinKey('2')">2</button><button onclick="pinKey('3')">3</button>
@@ -40,64 +36,21 @@
         <button onclick="pinKey('7')">7</button><button onclick="pinKey('8')">8</button><button onclick="pinKey('9')">9</button>
         <button onclick="pinClear()" class="pin-clear">✕</button><button onclick="pinKey('0')">0</button><button onclick="pinBack()" class="pin-clear">⌫</button>
       </div>
-      <div id="pin-error" class="pin-error hidden">Wrong PIN. Try 1234.</div>
+      <div id="pin-error" class="pin-error hidden">Wrong PIN. Default is 1234.</div>
       <button class="pin-cancel" onclick="closePin()">Cancel</button>
     </div>
   </div>
 </div>
 <script src="app.js"></script>
 <script>
-  var pinValue = '';
-  var PARENT_PIN = '1234';
-
-  function goStudent() {
-    var name = localStorage.getItem('studentName');
-    if (!name) {
-      name = prompt('What is your name?', 'My Daughter');
-      if (!name) return;
-      localStorage.setItem('studentName', name);
-    }
-    window.location.href = 'student.html';
-  }
-
-  function goParent() {
-    document.getElementById('pin-modal').classList.remove('hidden');
-    pinValue = '';
-    updateDots();
-  }
-
-  function closePin() {
-    document.getElementById('pin-modal').classList.add('hidden');
-    document.getElementById('pin-error').classList.add('hidden');
-    pinValue = '';
-    updateDots();
-  }
-
-  function pinKey(k) {
-    if (pinValue.length >= 4) return;
-    pinValue += k;
-    updateDots();
-    if (pinValue.length === 4) {
-      setTimeout(function() {
-        if (pinValue === PARENT_PIN) {
-          window.location.href = 'parent.html';
-        } else {
-          document.getElementById('pin-error').classList.remove('hidden');
-          pinValue = '';
-          updateDots();
-        }
-      }, 200);
-    }
-  }
-
-  function pinBack() { pinValue = pinValue.slice(0, -1); updateDots(); }
-  function pinClear() { pinValue = ''; updateDots(); }
-
-  function updateDots() {
-    for (var i = 0; i < 4; i++) {
-      document.getElementById('d' + i).classList.toggle('filled', i < pinValue.length);
-    }
-  }
+var pinValue=''; var PARENT_PIN='1234';
+function goStudent(){var name=localStorage.getItem('studentName');if(!name){name=prompt('What is your name?','My Daughter');if(!name)return;localStorage.setItem('studentName',name);}window.location.href='student.html';}
+function goParent(){document.getElementById('pin-modal').classList.remove('hidden');pinValue='';updateDots();}
+function closePin(){document.getElementById('pin-modal').classList.add('hidden');document.getElementById('pin-error').classList.add('hidden');pinValue='';updateDots();}
+function pinKey(k){if(pinValue.length>=4)return;pinValue+=k;updateDots();if(pinValue.length===4){setTimeout(function(){if(pinValue===PARENT_PIN){window.location.href='parent.html';}else{document.getElementById('pin-error').classList.remove('hidden');pinValue='';updateDots();}},200);}}
+function pinBack(){pinValue=pinValue.slice(0,-1);updateDots();}
+function pinClear(){pinValue='';updateDots();}
+function updateDots(){for(var i=0;i<4;i++){document.getElementById('d'+i).classList.toggle('filled',i<pinValue.length);}}
 </script>
 </body>
 </html>

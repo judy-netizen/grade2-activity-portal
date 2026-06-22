@@ -7,15 +7,12 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body class="parent-page">
-
 <header class="topbar">
   <a href="index.html" class="back-btn">← Home</a>
   <div class="topbar-title">👨‍👩‍👧 Parent Dashboard</div>
   <button class="reset-btn" onclick="confirmReset()">Reset scores</button>
 </header>
-
 <div class="page-wrap">
-
   <div class="student-banner">
     <div class="student-avatar" id="stu-avatar">?</div>
     <div>
@@ -26,61 +23,40 @@
 
   <div class="section-label">Overall progress</div>
   <div class="metrics-grid">
-    <div class="metric-card">
-      <div class="metric-label">Total score</div>
-      <div class="metric-val" id="m-total">–</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-label">Subjects tried</div>
-      <div class="metric-val" id="m-subjects">–</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-label">Best subject</div>
-      <div class="metric-val" id="m-best">–</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-label">Needs practice</div>
-      <div class="metric-val" id="m-weak">–</div>
-    </div>
+    <div class="metric-card"><div class="metric-label">Days completed</div><div class="metric-val" id="m-days">–</div></div>
+    <div class="metric-card"><div class="metric-label">Activities done</div><div class="metric-val" id="m-acts">–</div></div>
+    <div class="metric-card"><div class="metric-label">Best subject</div><div class="metric-val" id="m-best">–</div></div>
+    <div class="metric-card"><div class="metric-label">Current week</div><div class="metric-val" id="m-week">–</div></div>
   </div>
 
-  <div class="section-label">Subject breakdown</div>
+  <div class="section-label">Subject averages</div>
   <div class="subject-breakdown">
-    <div class="sub-row" id="sr-eng">
+    <div class="sub-row">
       <div class="sub-icon blue-bg">📖</div>
-      <div class="sub-info">
-        <div class="sub-name">English</div>
-        <div class="sub-bar-wrap"><div class="sub-bar blue-bar" id="bar-eng"></div></div>
-      </div>
-      <div class="sub-score" id="score-eng">–</div>
+      <div class="sub-info"><div class="sub-name">English</div><div class="sub-bar-wrap"><div class="sub-bar blue-bar" id="bar-english"></div></div></div>
+      <div class="sub-score" id="score-english">–</div>
     </div>
-    <div class="sub-row" id="sr-math">
+    <div class="sub-row">
       <div class="sub-icon green-bg">🔢</div>
-      <div class="sub-info">
-        <div class="sub-name">Math</div>
-        <div class="sub-bar-wrap"><div class="sub-bar green-bar" id="bar-math"></div></div>
-      </div>
+      <div class="sub-info"><div class="sub-name">Math</div><div class="sub-bar-wrap"><div class="sub-bar green-bar" id="bar-math"></div></div></div>
       <div class="sub-score" id="score-math">–</div>
     </div>
-    <div class="sub-row" id="sr-fil">
+    <div class="sub-row">
       <div class="sub-icon pink-bg">🇵🇭</div>
-      <div class="sub-info">
-        <div class="sub-name">Filipino</div>
-        <div class="sub-bar-wrap"><div class="sub-bar pink-bar" id="bar-fil"></div></div>
-      </div>
-      <div class="sub-score" id="score-fil">–</div>
+      <div class="sub-info"><div class="sub-name">Filipino</div><div class="sub-bar-wrap"><div class="sub-bar pink-bar" id="bar-filipino"></div></div></div>
+      <div class="sub-score" id="score-filipino">–</div>
     </div>
-    <div class="sub-row" id="sr-spell">
+    <div class="sub-row">
       <div class="sub-icon amber-bg">✏️</div>
-      <div class="sub-info">
-        <div class="sub-name">Spelling</div>
-        <div class="sub-bar-wrap"><div class="sub-bar amber-bar" id="bar-spell"></div></div>
-      </div>
-      <div class="sub-score" id="score-spell">–</div>
+      <div class="sub-info"><div class="sub-name">Spelling</div><div class="sub-bar-wrap"><div class="sub-bar amber-bar" id="bar-spelling"></div></div></div>
+      <div class="sub-score" id="score-spelling">–</div>
     </div>
   </div>
 
-  <div class="section-label">Activity history</div>
+  <div class="section-label">Daily progress (20 days)</div>
+  <div class="day-progress-grid" id="day-progress-grid"></div>
+
+  <div class="section-label">Recent activity</div>
   <div class="history-list" id="history-list">
     <div class="empty-state">No activity yet. Ask your daughter to start learning! 🌟</div>
   </div>
@@ -88,75 +64,95 @@
   <div class="tips-card">
     <div class="tips-title">💡 Parent tips</div>
     <ul class="tips-list">
-      <li>Encourage your daughter to do at least one subject per day.</li>
-      <li>Celebrate every correct answer — even small wins matter!</li>
-      <li>For subjects below 60%, try doing the activity together.</li>
-      <li>The PIN to access this dashboard is <strong>1234</strong> — change it in app.js.</li>
+      <li>Try to complete one day's activities each day — consistency is key!</li>
+      <li>Week 1 is easiest, Week 4 is the most challenging. 4 weeks, 20 days total.</li>
+      <li>For subjects below 60%, sit with your daughter and do it together.</li>
+      <li>Celebrate every completed day — even a sticker on the calendar helps! 🌟</li>
+      <li>Parent PIN is <strong>1234</strong> — change it in index.html if needed.</li>
     </ul>
   </div>
 </div>
-
-<script src="app.js"></script>
+<script src="activities.js"></script>
 <script>
-  var name = localStorage.getItem('studentName') || 'Your daughter';
-  document.getElementById('stu-name').textContent = name;
-  document.getElementById('stu-avatar').textContent = name.charAt(0).toUpperCase();
+var name = localStorage.getItem('studentName') || 'Your daughter';
+document.getElementById('stu-name').textContent = name;
+document.getElementById('stu-avatar').textContent = name.charAt(0).toUpperCase();
+document.getElementById('stu-meta').textContent = 'Last activity: ' + (localStorage.getItem('lastActivity') || '–');
 
-  var lastActivity = localStorage.getItem('lastActivity');
-  document.getElementById('stu-meta').textContent = lastActivity
-    ? 'Last activity: ' + lastActivity : 'No activity yet';
+var subjects = ['english','math','filipino','spelling'];
+var subjectTotals = {english:{sc:0,mx:0,cnt:0}, math:{sc:0,mx:0,cnt:0}, filipino:{sc:0,mx:0,cnt:0}, spelling:{sc:0,mx:0,cnt:0}};
+var daysCompleted = 0; var actsCompleted = 0;
 
-  var subjects = ['eng','math','fil','spell'];
-  var subjectNames = {eng:'English', math:'Math', fil:'Filipino', spell:'Spelling'};
-  var totalScore = 0, totalMax = 0, tried = 0;
-  var bestSub = null, bestPct = -1, weakSub = null, weakPct = 101;
-
+for (var d = 1; d <= 20; d++) {
+  var dayDone = localStorage.getItem('day_done_' + d);
+  if (dayDone) daysCompleted++;
   subjects.forEach(function(s) {
-    var data = JSON.parse(localStorage.getItem('score_' + s) || 'null');
+    var data = JSON.parse(localStorage.getItem('day' + d + '_' + s) || 'null');
     if (data) {
-      tried++;
-      var pct = Math.round((data.score / data.max) * 100);
-      totalScore += data.score;
-      totalMax += data.max;
-      document.getElementById('score-' + s).textContent = data.score + '/' + data.max + ' (' + pct + '%)';
-      document.getElementById('bar-' + s).style.width = pct + '%';
-      if (pct > bestPct) { bestPct = pct; bestSub = subjectNames[s]; }
-      if (pct < weakPct) { weakPct = pct; weakSub = subjectNames[s]; }
-    } else {
-      document.getElementById('score-' + s).textContent = 'Not done';
-      document.getElementById('bar-' + s).style.width = '0%';
+      actsCompleted++;
+      subjectTotals[s].sc += data.score;
+      subjectTotals[s].mx += data.max;
+      subjectTotals[s].cnt++;
     }
   });
+}
 
-  document.getElementById('m-total').textContent = totalMax > 0
-    ? totalScore + '/' + totalMax : '–';
-  document.getElementById('m-subjects').textContent = tried + '/4';
-  document.getElementById('m-best').textContent = bestSub || '–';
-  document.getElementById('m-weak').textContent = (weakSub && tried > 0) ? weakSub : '–';
+var currentWeek = daysCompleted < 5 ? 'Week 1' : daysCompleted < 10 ? 'Week 2' : daysCompleted < 15 ? 'Week 3' : 'Week 4';
+document.getElementById('m-days').textContent = daysCompleted + '/20';
+document.getElementById('m-acts').textContent = actsCompleted + '/80';
+document.getElementById('m-week').textContent = currentWeek;
 
-  var history = JSON.parse(localStorage.getItem('activityHistory') || '[]');
-  if (history.length > 0) {
-    var html = '';
-    history.slice().reverse().forEach(function(h) {
-      var pct = Math.round((h.score / h.max) * 100);
-      var cls = pct >= 80 ? 'hist-good' : pct >= 50 ? 'hist-ok' : 'hist-low';
-      html += '<div class="hist-row ' + cls + '">' +
-        '<span class="hist-subject">' + h.subject + '</span>' +
-        '<span class="hist-score">' + h.score + '/' + h.max + ' — ' + pct + '%</span>' +
-        '<span class="hist-time">' + h.time + '</span></div>';
-    });
-    document.getElementById('history-list').innerHTML = html;
+var bestSub = null, bestPct = -1;
+subjects.forEach(function(s) {
+  var st = subjectTotals[s];
+  if (st.mx > 0) {
+    var pct = Math.round(st.sc / st.mx * 100);
+    document.getElementById('score-' + s).textContent = st.sc + '/' + st.mx + ' (' + pct + '%)';
+    document.getElementById('bar-' + s).style.width = pct + '%';
+    if (pct > bestPct) { bestPct = pct; bestSub = s.charAt(0).toUpperCase() + s.slice(1); }
+  } else {
+    document.getElementById('score-' + s).textContent = 'Not started';
   }
+});
+document.getElementById('m-best').textContent = bestSub || '–';
 
-  function confirmReset() {
-    if (confirm('Reset all scores for ' + name + '? This cannot be undone.')) {
-      subjects.forEach(function(s) { localStorage.removeItem('score_' + s); });
-      localStorage.removeItem('activityHistory');
-      localStorage.removeItem('lastActivity');
-      alert('Scores reset!');
-      window.location.reload();
+var pgHtml = '';
+for (var dd = 1; dd <= 20; dd++) {
+  var done = localStorage.getItem('day_done_' + dd);
+  var partial = subjects.some(function(s) { return localStorage.getItem('day' + dd + '_' + s); });
+  var cls = done ? 'dp-cell dp-done' : partial ? 'dp-cell dp-partial' : 'dp-cell';
+  pgHtml += '<div class="' + cls + '" title="Day ' + dd + '">' + dd + (done ? ' ✓' : '') + '</div>';
+}
+document.getElementById('day-progress-grid').innerHTML = pgHtml;
+
+var history = JSON.parse(localStorage.getItem('activityHistory') || '[]');
+if (history.length > 0) {
+  var html = '';
+  history.slice(-15).reverse().forEach(function(h) {
+    var pct = Math.round(h.score / h.max * 100);
+    var cls = pct >= 80 ? 'hist-good' : pct >= 50 ? 'hist-ok' : 'hist-low';
+    html += '<div class="hist-row ' + cls + '">';
+    html += '<span class="hist-subject">Day ' + h.day + ' ' + h.subject + '</span>';
+    html += '<span class="hist-score">' + h.score + '/' + h.max + ' (' + pct + '%)</span>';
+    html += '<span class="hist-time">' + h.time + '</span></div>';
+  });
+  document.getElementById('history-list').innerHTML = html;
+}
+
+function confirmReset() {
+  if (confirm('Reset ALL scores for ' + name + '? This cannot be undone.')) {
+    for (var d = 1; d <= 20; d++) {
+      localStorage.removeItem('day_done_' + d);
+      ['english','math','filipino','spelling'].forEach(function(s) {
+        localStorage.removeItem('day' + d + '_' + s);
+      });
     }
+    localStorage.removeItem('activityHistory');
+    localStorage.removeItem('lastActivity');
+    alert('All scores reset!');
+    window.location.reload();
   }
+}
 </script>
 </body>
 </html>
