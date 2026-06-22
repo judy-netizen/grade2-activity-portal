@@ -21,6 +21,7 @@
     <div class="activity-nav">
       <button class="back-to-days" onclick="showDayPicker()">← Back to days</button>
       <div class="activity-day-title" id="activity-day-title"></div>
+      <button class="retry-btn" onclick="confirmRetry()" title="Retry this activity">🔄 Retry</button>
     </div>
     <div class="subject-tabs" id="subject-tabs">
       <button class="stab active" data-s="english" onclick="showAct('english',this)">📖 English</button>
@@ -91,6 +92,17 @@ function showDayPicker() {
   document.getElementById('activity-screen').classList.add('hidden');
   document.getElementById('day-picker-screen').classList.remove('hidden');
   buildDayPicker();
+}
+
+function confirmRetry() {
+  var subjectNames = {english:'English', math:'Math', filipino:'Filipino', spelling:'Spelling'};
+  var subName = subjectNames[currentSubject];
+  if (confirm('Retry ' + subName + ' for Day ' + currentDay.day + '? Your current answer will be cleared.')) {
+    localStorage.removeItem('day' + currentDay.day + '_' + currentSubject);
+    localStorage.removeItem('day_done_' + currentDay.day);
+    state = {};
+    renderActivity(currentSubject);
+  }
 }
 
 function showAct(subject, btn) {

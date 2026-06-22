@@ -212,3 +212,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 .fil-story-box{background:#FBEAF0;border:1.5px solid #F4C0D1;border-radius:var(--radius);padding:16px 18px;font-size:14px;line-height:1.9;color:var(--text);margin-bottom:16px}
 .fil-story-box strong{font-weight:500;font-size:16px;display:block;margin-bottom:8px;color:#72243E}
+
+.retry-btn{padding:7px 14px;border:0.5px solid #F4C0D1;border-radius:var(--radius-sm);background:transparent;cursor:pointer;font-size:13px;font-weight:500;color:#993556;transition:background .15s}
+.retry-btn:hover{background:#FBEAF0}
