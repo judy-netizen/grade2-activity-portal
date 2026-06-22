@@ -4,40 +4,59 @@ var ACTIVITIES = {
     difficulty: 1,
     days: [
       {
-        day: 1, title: "Animals Around Us",
+        day: 1, title: "How to Catch a Cookie",
         focus: "English",
         english: {
           type: "comprehension",
-          story: "🐶 Tom has a dog named Buddy. Buddy is brown and white. He likes to run and play in the yard. Every morning, Tom gives Buddy food and water. Buddy wags his tail when Tom comes home.",
+          story: "🍪 <strong>How to Catch a Cookie</strong><br><br>Tommy woke to the sound of shouting and running feet. A big man in a long white apron ran past him shaking a wooden spoon in the air.<br><br>\"Come back here!\" the man yelled. He seemed very upset.<br><br>What is going on? Tommy wondered as he sat up in the grass beside a dirt path.<br><br>The big man stopped running and turned back to look at Tommy. \"Did you see that?\" he asked, still shaking his spoon.<br><br>\"No. I'm sorry sir, I didn't,\" Tommy said.<br><br>\"Gone. Just gone,\" the man said and gave a deep sigh. \"How will my bakery ever stay in business if my gingerbread men keep running off?\"<br><br>\"Excuse me, but did you say your gingerbread men can run?\" Tommy asked.<br><br>\"Of course, they can run. I gave them legs,\" the baker replied. \"I am Chef Shiraz and I bake the best cookies you'll ever taste, if you can catch one. The spice in my recipe gives them the snap to jump right off the pan once they're cooked.\"<br><br>Tommy suggested locking the bakery doors — but the cookies ran wild inside. He suggested wrapping licorice around their legs — but Chef Shiraz said licorice would melt in a hot oven. Then Tommy suggested using a heart-shaped cookie cutter instead of a gingerbread man shape.<br><br>Chef Shiraz gently shook Tommy's shoulders... and Tommy opened his eyes to find his mother waking him up. It had all been a dream!<br><br>\"Wow Mom! You're never going to believe the dream I just had.\"",
           questions: [
-            {q:"What is the dog's name?", opts:["Max","Buddy","Rex"], a:1},
-            {q:"What color is Buddy?", opts:["Black and white","Brown and white","Yellow"], a:1},
-            {q:"What does Tom give Buddy every morning?", opts:["Toys","Food and water","A bone"], a:1}
+            {q:"What gave the baker's cookies the snap to jump off the pan?", opts:["Eggs","Flour","Spice","Batteries"], a:2},
+            {q:"What did Chef Shiraz believe licorice would do in a hot oven?", opts:["It would stretch","It would melt","It would become hard","Nothing would happen"], a:1},
+            {q:"What happened when the baker locked the bakery doors?", opts:["The cookies stayed in the pan","The cookies burned","The cookies hid in the oven","The cookies ran wild inside the bakery"], a:3}
+          ],
+          fill_blanks: [
+            {sentence:"A ___ man in a long ___ apron ran past Tommy shaking a ___ spoon.", words:["big","white","wooden"]},
+            {sentence:"How will Chef Shiraz's ___ stay in business if his ___ men keep running off?", words:["bakery","gingerbread"]}
           ]
         },
         math: {
           type: "word_problems",
+          context: "🥫 The local food bank was receiving donations from the community.",
           problems: [
-            {q:"🐕 There are 3 dogs and 2 cats. How many animals in all?", a:5},
-            {q:"🐦 A tree has 8 birds. 3 fly away. How many are left?", a:5},
-            {q:"🐟 Ana has 4 fish. She buys 3 more. How many fish now?", a:7}
+            {q:"1. During the first week, they received 12 boxes of canned soup and 36 boxes of crackers. During the second week, they received 25 boxes of canned soup and 24 boxes of crackers. How many boxes of crackers did they receive in total?", a:60},
+            {q:"2. They had 40 boxes of pasta sauce in storage and received 47 more boxes last month. How many boxes of pasta sauce are there?", a:87},
+            {q:"3. In the storage room, there are 16 boxes of corn flakes. There were 19 more boxes of Cheerios than corn flakes. How many boxes of cereal are there in all?", a:51},
+            {q:"4. The food bank expected to recruit 60 volunteers. 34 men and 45 women signed up. How many volunteers were recruited?", a:79},
+            {q:"5. The local food bank opened 18 days in January and 21 days in February. If it will be open for 15 days in March, how many days is it open in these three months?", a:54},
+            {q:"6. The food bank opens for 4 hours on Friday and 5 hours each on Saturday and Sunday. Write the total: 4 + 5 + 5 = ?", a:14}
           ]
         },
         filipino: {
-          type: "matching",
-          pairs: [
-            {emoji:"🐶", english:"Dog", filipino:"Aso"},
-            {emoji:"🐱", english:"Cat", filipino:"Pusa"},
-            {emoji:"🐦", english:"Bird", filipino:"Ibon"},
-            {emoji:"🐟", english:"Fish", filipino:"Isda"}
+          type: "comprehension",
+          story: "🚲 <strong>Magbasa Tayo!</strong><br><br>Si Maya ay may bisikleta. Ang bisikleta ay kulay dilaw. Dalawa ang gulong nito. Mahilig magbisikleta si Maya tuwing hapon. Ito ang gamit niya papunta sa palaruan. May mga kalaro siya sa palaruan. May mga bisikleta rin sila.",
+          instruction: "Basahin ang maikling talata tungkol kay Maya. Piliin ang tamang sagot.",
+          questions: [
+            {q:"1. Ano ang sakay ni Maya?", opts:["Pedicab","Traysikel","Bisikleta"], a:2},
+            {q:"2. Ano ang kulay nito?", opts:["Dilaw","Berde","Pula"], a:0},
+            {q:"3. Kailan siya nagbibisikleta?", opts:["Tuwing umaga","Tuwing hapon","Tuwing gabi"], a:1},
+            {q:"4. Saan pumupunta si Maya?", opts:["Sa kapitbahay","Sa paaralan","Sa palaruan"], a:2},
+            {q:"5. Sino ang makikita ni Maya roon?", opts:["Ang mga kalaro niya","Ang mga magulang niya","Ang mga kapatid niya"], a:0},
+            {q:"6. Ano kaya ang gagawin nila?", opts:["Sila ay mag-aaral","Sila ay maglalaro ng bola","Sila ay magbibisikleta"], a:2}
           ]
         },
         spelling: {
+          type: "vowel_fill",
+          instruction: "Choose the correct vowel to spell the word of the picture shown.",
           words: [
-            {clue:"🐶", hint:"Man's best friend", answer:"dog"},
-            {clue:"🐱", hint:"It says meow", answer:"cat"},
-            {clue:"🐦", hint:"It can fly", answer:"bird"},
-            {clue:"🐟", hint:"Lives in water", answer:"fish"}
+            {clue:"🎩", display:"H _ T", answer:"HAT", missing:"A", opts:["A","E","I","O","U"]},
+            {clue:"👁️", display:"EY _", answer:"EYE", missing:"E", opts:["A","E","I","O","U"]},
+            {clue:"🐷", display:"P _ G", answer:"PIG", missing:"I", opts:["A","E","I","O","U"]},
+            {clue:"🥧", display:"P _ E", answer:"PIE", missing:"I", opts:["A","E","I","O","U"]},
+            {clue:"🥚", display:"_ GG", answer:"EGG", missing:"E", opts:["A","E","I","O","U"]},
+            {clue:"🐕", display:"D _ G", answer:"DOG", missing:"O", opts:["A","E","I","O","U"]},
+            {clue:"☀️", display:"S _ N", answer:"SUN", missing:"U", opts:["A","E","I","O","U"]},
+            {clue:"🐈", display:"C _ T", answer:"CAT", missing:"A", opts:["A","E","I","O","U"]},
+            {clue:"🐝", display:"BE _", answer:"BEE", missing:"E", opts:["A","E","I","O","U"]}
           ]
         }
       },
