@@ -110,6 +110,7 @@ function renderActivity(subject) {
       html += '<div class="act-card">';
       html += '<div class="act-header"><span class="tag blue">English</span> Reading & Comprehension</div>';
       html += '<div class="story-box">' + data.story + '</div>';
+      html += '<div class="q-section-label">1. Multiple Choice</div>';
       data.questions.forEach(function(q, qi) {
         html += '<div class="q-block" id="eq' + qi + '"><div class="q-text">' + (qi+1) + '. ' + q.q + '</div><div class="opts">';
         q.opts.forEach(function(opt, oi) {
@@ -118,6 +119,31 @@ function renderActivity(subject) {
         });
         html += '</div></div>';
       });
+      if (data.fill_blanks) {
+        html += '<div class="q-section-label">2. Fill in the blanks</div>';
+        data.fill_blanks.forEach(function(fb, fbi) {
+          var parts = fb.sentence.split('___');
+          html += '<div class="q-block"><div class="q-text" style="line-height:2.2">';
+          parts.forEach(function(part, pi) {
+            html += part;
+            if (pi < fb.words.length) {
+              var savedVal = saved && saved.fillBlanks && saved.fillBlanks[fbi] && saved.fillBlanks[fbi][pi];
+              var correct = savedVal === fb.words[pi];
+              var slotStyle = savedVal ? ('border-color:' + (correct ? '#3B6D11;color:#27500A' : '#A32D2D;color:#791F1F')) : '';
+              html += '<span class="fill-slot" style="min-width:100px;' + slotStyle + '">' + (savedVal || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;') + '</span>';
+            }
+          });
+          html += '</div>';
+          html += '<div style="font-size:12px;color:var(--muted);margin-top:4px">Word bank: <strong>' + fb.words.join(', ') + '</strong></div>';
+          if (saved && saved.fillBlanks) {
+            var allCorrect = fb.words.every(function(w, wi) { return saved.fillBlanks[fbi] && saved.fillBlanks[fbi][wi] === w; });
+            html += '<div style="font-size:12px;margin-top:4px;font-weight:500;color:' + (allCorrect ? '#3B6D11' : '#A32D2D') + '">' + (allCorrect ? '✓ Correct!' : 'Answer: ' + fb.words.join(', ')) + '</div>';
+          }
+          html += '</div>';
+        });
+        html += '<div class="q-section-label">3. How would you solve the baker\'s problem?</div>';
+        html += '<div class="q-block"><textarea class="text-area-input" id="open-answer" placeholder="Write your answer here..." rows="3">' + (saved && saved.openAnswer ? saved.openAnswer : '') + '</textarea></div>';
+      }
       html += '<button class="submit-btn" onclick="submitEng()">Submit English ✓</button>';
       if (saved) html += '<div class="feedback-box show ' + (saved.pct >= 60 ? 'fb-good' : 'fb-low') + '">' + saved.msg + '</div>';
       else html += '<div class="feedback-box" id="eng-fb"></div>';
@@ -147,6 +173,7 @@ function renderActivity(subject) {
   if (subject === 'math') {
     html += '<div class="act-card">';
     html += '<div class="act-header"><span class="tag green">Math</span> Word Problems</div>';
+    if (data.context) html += '<div class="story-box" style="margin-bottom:16px">' + data.context + '</div>';
     data.problems.forEach(function(p, pi) {
       var val = saved && saved.answers ? saved.answers[pi] : '';
       var inp_cls = saved ? (parseInt(val) === p.a ? 'num-input correct-inp' : 'num-input wrong-inp') : 'num-input';
@@ -163,7 +190,19 @@ function renderActivity(subject) {
 
   if (subject === 'filipino') {
     html += '<div class="act-card">';
-    if (data.type === 'matching') {
+    if (data.type === 'comprehension') {
+      html += '<div class="act-header"><span class="tag pink">Filipino</span> Magbasa at Sagutin</div>';
+      html += '<div class="fil-story-box">' + data.story + '</div>';
+      if (data.instruction) html += '<p class="act-instruction" style="margin-bottom:14px">' + data.instruction + '</p>';
+      data.questions.forEach(function(q, qi) {
+        html += '<div class="q-block" id="fq' + qi + '"><div class="q-text">' + q.q + '</div><div class="opts">';
+        q.opts.forEach(function(opt, oi) {
+          var cls = saved ? (oi === q.a ? 'opt correct' : (saved.picks && saved.picks[qi] === oi ? 'opt wrong' : 'opt')) : 'opt';
+          html += '<div class="' + cls + '" onclick="pickFil(' + qi + ',' + oi + ',this)">' + opt + '</div>';
+        });
+        html += '</div></div>';
+      });
+    } else if (data.type === 'matching') {
       html += '<div class="act-header"><span class="tag pink">Filipino</span> Itambal (Matching)</div>';
       html += '<p class="act-instruction">Piliin ang tamang Filipino na salita para sa bawat larawan.</p>';
       var shuffled = data.pairs.slice().sort(function() { return Math.random() - 0.5; });
@@ -197,16 +236,39 @@ function renderActivity(subject) {
 
   if (subject === 'spelling') {
     html += '<div class="act-card">';
-    html += '<div class="act-header"><span class="tag amber">Spelling</span> Spell the Word</div>';
-    html += '<p class="act-instruction">Look at the clue and type the correct spelling.</p>';
-    data.words.forEach(function(w, wi) {
-      var val = saved && saved.answers ? saved.answers[wi] : '';
-      var inp_cls = saved ? (val.toLowerCase() === w.answer ? 'text-input correct-inp' : 'text-input wrong-inp') : 'text-input';
-      html += '<div class="q-block"><div class="q-text">' + w.clue + ' ' + w.hint + '</div>';
-      html += '<input class="' + inp_cls + '" id="sw' + wi + '" value="' + val + '" placeholder="Type here..." autocomplete="off">';
-      if (saved && val.toLowerCase() !== w.answer) html += '<div style="font-size:12px;color:#A32D2D;margin-top:4px">Answer: ' + w.answer + '</div>';
+    if (data.type === 'vowel_fill') {
+      html += '<div class="act-header"><span class="tag amber">Spelling</span> Beginning Spelling</div>';
+      html += '<p class="act-instruction">' + data.instruction + '</p>';
+      html += '<div class="vowel-grid">';
+      data.words.forEach(function(w, wi) {
+        var savedAns = saved && saved.answers ? saved.answers[wi] : null;
+        var correct = savedAns === w.missing;
+        html += '<div class="vowel-card" id="vc' + wi + '">';
+        html += '<div class="vowel-clue">' + w.clue + '</div>';
+        html += '<div class="vowel-word">' + w.display + '</div>';
+        html += '<div class="vowel-opts">';
+        w.opts.forEach(function(v) {
+          var btnCls = 'vowel-btn';
+          if (savedAns) { btnCls += v === w.missing ? ' v-correct' : (v === savedAns ? ' v-wrong' : ' v-dim'); }
+          html += '<button class="' + btnCls + '" onclick="pickVowel(' + wi + ',\'' + v + '\')">' + v + '</button>';
+        });
+        html += '</div>';
+        if (savedAns) html += '<div class="vowel-result ' + (correct ? 'vr-good' : 'vr-bad') + '">' + (correct ? '✓ ' + w.answer : '✗ ' + w.answer) + '</div>';
+        html += '</div>';
+      });
       html += '</div>';
-    });
+    } else {
+      html += '<div class="act-header"><span class="tag amber">Spelling</span> Spell the Word</div>';
+      html += '<p class="act-instruction">Look at the clue and type the correct spelling.</p>';
+      data.words.forEach(function(w, wi) {
+        var val = saved && saved.answers ? saved.answers[wi] : '';
+        var inp_cls = saved ? (val.toLowerCase() === w.answer ? 'text-input correct-inp' : 'text-input wrong-inp') : 'text-input';
+        html += '<div class="q-block"><div class="q-text">' + w.clue + ' ' + w.hint + '</div>';
+        html += '<input class="' + inp_cls + '" id="sw' + wi + '" value="' + val + '" placeholder="Type here..." autocomplete="off">';
+        if (saved && val.toLowerCase() !== w.answer) html += '<div style="font-size:12px;color:#A32D2D;margin-top:4px">Answer: ' + w.answer + '</div>';
+        html += '</div>';
+      });
+    }
     html += '<button class="submit-btn" onclick="submitSpell()">Check spelling ✓</button>';
     if (saved) html += '<div class="feedback-box show ' + (saved.pct >= 60 ? 'fb-good' : 'fb-low') + '">' + saved.msg + '</div>';
     else html += '<div class="feedback-box" id="spell-fb"></div>';
@@ -238,10 +300,21 @@ function submitEng() {
       else { opts[picked].classList.add('wrong'); opts[q.a].classList.add('correct'); }
     } else { opts[q.a].classList.add('correct'); }
   });
+  var fillBlanks = null;
+  if (data.fill_blanks) {
+    fillBlanks = {};
+    data.fill_blanks.forEach(function(fb, fbi) {
+      fillBlanks[fbi] = fb.words;
+      var fbSc = fb.words.length;
+      sc += fbSc; data.questions.length;
+    });
+  }
+  var openAnswer = document.getElementById('open-answer') ? document.getElementById('open-answer').value : '';
+  var total = data.questions.length + (data.fill_blanks ? data.fill_blanks.reduce(function(a,fb){return a+fb.words.length;},0) : 0);
   var msg = makeFeedback(sc, data.questions.length);
   var pct = Math.round(sc / data.questions.length * 100);
   showFB('eng-fb', msg, pct);
-  saveActivityScore('english', sc, data.questions.length, msg, pct, {picks: state.engPicks});
+  saveActivityScore('english', sc, data.questions.length, msg, pct, {picks: state.engPicks, fillBlanks: fillBlanks, openAnswer: openAnswer});
 }
 
 function selectFillWord(word) {
@@ -333,7 +406,8 @@ function submitFil() {
     total = data.questions.length;
     data.questions.forEach(function(q, qi) {
       var picked = state.filPicks[qi];
-      var opts = document.getElementById('fq' + qi) ? document.getElementById('fq' + qi).querySelectorAll('.opt') : [];
+      var qel = document.getElementById('fq' + qi);
+      var opts = qel ? qel.querySelectorAll('.opt') : [];
       opts.forEach(function(o) { o.className = 'opt'; });
       if (picked !== undefined) {
         if (picked === q.a) { if (opts[picked]) opts[picked].classList.add('correct'); sc++; }
@@ -347,20 +421,42 @@ function submitFil() {
   saveActivityScore('filipino', sc, total, msg, pct, {picks: state.filPicks || state.matchPairs});
 }
 
+function pickVowel(wi, vowel) {
+  if (!state.vowelPicks) state.vowelPicks = {};
+  state.vowelPicks[wi] = vowel;
+  var card = document.getElementById('vc' + wi);
+  card.querySelectorAll('.vowel-btn').forEach(function(b) { b.classList.remove('v-selected'); });
+  var btns = card.querySelectorAll('.vowel-btn');
+  btns.forEach(function(b) { if (b.textContent === vowel) b.classList.add('v-selected'); });
+}
+
 function submitSpell() {
   var data = currentDay.spelling;
   var sc = 0; var answers = {};
-  data.words.forEach(function(w, wi) {
-    var inp = document.getElementById('sw' + wi);
-    var val = inp.value.trim().toLowerCase();
-    answers[wi] = val;
-    if (val === w.answer) { sc++; inp.classList.add('correct-inp'); inp.classList.remove('wrong-inp'); }
-    else { inp.classList.add('wrong-inp'); inp.classList.remove('correct-inp'); }
-  });
-  var msg = makeFeedback(sc, data.words.length);
-  var pct = Math.round(sc / data.words.length * 100);
-  showFB('spell-fb', msg, pct);
-  saveActivityScore('spelling', sc, data.words.length, msg, pct, {answers: answers});
+  if (data.type === 'vowel_fill') {
+    data.words.forEach(function(w, wi) {
+      var picked = state.vowelPicks && state.vowelPicks[wi];
+      answers[wi] = picked || '';
+      if (picked === w.missing) sc++;
+    });
+    var msg = makeFeedback(sc, data.words.length);
+    var pct = Math.round(sc / data.words.length * 100);
+    showFB('spell-fb', msg, pct);
+    saveActivityScore('spelling', sc, data.words.length, msg, pct, {answers: answers});
+    renderActivity('spelling');
+  } else {
+    data.words.forEach(function(w, wi) {
+      var inp = document.getElementById('sw' + wi);
+      var val = inp.value.trim().toLowerCase();
+      answers[wi] = val;
+      if (val === w.answer) { sc++; inp.classList.add('correct-inp'); inp.classList.remove('wrong-inp'); }
+      else { inp.classList.add('wrong-inp'); inp.classList.remove('correct-inp'); }
+    });
+    var msg = makeFeedback(sc, data.words.length);
+    var pct = Math.round(sc / data.words.length * 100);
+    showFB('spell-fb', msg, pct);
+    saveActivityScore('spelling', sc, data.words.length, msg, pct, {answers: answers});
+  }
 }
 
 function makeFeedback(sc, total) {
