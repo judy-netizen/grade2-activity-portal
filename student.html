@@ -357,9 +357,10 @@ function renderActivity(subject) {
     html += '</div>';
     // Descriptions column (shuffled display)
     var shuffled = sci.pairs.slice().sort(function() { return Math.random() - 0.5; });
+    state.shuffledDescs = shuffled;
     html += '<div class="sci-col"><div class="sci-col-label">📋 Descriptions</div>';
     shuffled.forEach(function(p, si) {
-      html += '<div class="sci-desc-btn" id="sdi' + si + '" data-desc="' + p.description.replace(/"/g,'&quot;') + '" onclick="selectSciDesc(this,' + si + ')">' + p.description + '</div>';
+      html += '<div class="sci-desc-btn" id="sdi' + si + '" onclick="selectSciDesc(' + si + ')">' + p.description + '</div>';
     });
     html += '</div></div>';
     html += '<button class="submit-btn" onclick="submitScience()">Check answers ✓</button>';
@@ -587,16 +588,16 @@ function selectSciPlanet(pi) {
   state.sciSelPlanet = pi;
 }
 
-function selectSciDesc(el, si) {
+function selectSciDesc(si) {
   if (state.sciSelPlanet === null) return;
   if (!state.sciPairs) state.sciPairs = {};
-  var desc = el.getAttribute('data-desc');
+  var desc = state.shuffledDescs[si].description;
   state.sciPairs[state.sciSelPlanet] = desc;
-  // Visual feedback
   document.querySelectorAll('.sci-planet-btn').forEach(function(e) { e.classList.remove('sci-selected'); });
   var planetEl = document.getElementById('spi' + state.sciSelPlanet);
   if (planetEl) { planetEl.style.borderColor = '#185FA5'; planetEl.style.background = '#E6F1FB'; }
-  el.style.opacity = '0.4'; el.style.pointerEvents = 'none';
+  var descEl = document.getElementById('sdi' + si);
+  if (descEl) { descEl.style.opacity = '0.4'; descEl.style.pointerEvents = 'none'; }
   state.sciSelPlanet = null;
 }
 
@@ -620,7 +621,7 @@ function submitScience() {
   localStorage.setItem('activityHistory', JSON.stringify(history));
 }
 
-
+function makeFeedback(sc, total) {
   var pct = Math.round(sc / total * 100);
   if (pct === 100) return '🌟 Perfect score! Amazing work!';
   if (pct >= 75) return '😊 Great job! ' + sc + '/' + total + ' correct!';
