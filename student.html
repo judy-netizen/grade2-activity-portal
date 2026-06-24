@@ -205,10 +205,43 @@ function renderActivity(subject) {
         var val = saved && saved.answers ? (saved.answers[ci] || '') : '';
         var correct = val === c.answer;
         var inp_cls = saved ? (correct ? 'text-input correct-inp' : 'text-input wrong-inp') : 'text-input';
+        // Parse hour from answer e.g. "7:00" -> 7
+        var hour = parseInt(c.answer.split(':')[0]);
+        // Hour hand angle: each hour = 30 degrees, 12 o'clock = -90deg
+        var hourAngle = (hour % 12) * 30 - 90;
+        var hourRad = hourAngle * Math.PI / 180;
+        var hx2 = Math.round(50 + 28 * Math.cos(hourRad));
+        var hy2 = Math.round(50 + 28 * Math.sin(hourRad));
+        // Minute hand always points to 12 (top)
+        var mx2 = 50; var my2 = 14;
+        // Build SVG clock
+        var svgClock = '<svg viewBox="0 0 100 100" width="100" height="100" xmlns="http://www.w3.org/2000/svg">' +
+          // Outer circle
+          '<circle cx="50" cy="50" r="46" fill="white" stroke="#555" stroke-width="3"/>' +
+          // Center dot
+          '<circle cx="50" cy="50" r="3" fill="#333"/>' +
+          // Hour numbers
+          '<text x="50" y="12" text-anchor="middle" font-size="9" fill="#333" font-family="sans-serif">12</text>' +
+          '<text x="88" y="54" text-anchor="middle" font-size="9" fill="#333" font-family="sans-serif">3</text>' +
+          '<text x="50" y="96" text-anchor="middle" font-size="9" fill="#333" font-family="sans-serif">6</text>' +
+          '<text x="12" y="54" text-anchor="middle" font-size="9" fill="#333" font-family="sans-serif">9</text>' +
+          // Tick marks
+          [1,2,3,4,5,6,7,8,9,10,11,12].map(function(h) {
+            var a = (h * 30 - 90) * Math.PI / 180;
+            var x1 = Math.round(50 + 40 * Math.cos(a));
+            var y1 = Math.round(50 + 40 * Math.sin(a));
+            var x2 = Math.round(50 + 44 * Math.cos(a));
+            var y2 = Math.round(50 + 44 * Math.sin(a));
+            return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="#999" stroke-width="1.5"/>';
+          }).join('') +
+          // Minute hand (points to 12)
+          '<line x1="50" y1="50" x2="' + mx2 + '" y2="' + my2 + '" stroke="#333" stroke-width="3" stroke-linecap="round"/>' +
+          // Hour hand
+          '<line x1="50" y1="50" x2="' + hx2 + '" y2="' + hy2 + '" stroke="#333" stroke-width="4" stroke-linecap="round"/>' +
+          '</svg>';
         html += '<div class="clock-card">';
         html += '<div class="clock-num">Clock ' + c.num + '</div>';
-        html += '<div class="clock-face" id="cf' + ci + '"></div>';
-        html += '<div class="clock-hint">' + c.hint + '</div>';
+        html += '<div class="clock-svg-wrap">' + svgClock + '</div>';
         html += '<input class="' + inp_cls + '" id="tc' + ci + '" value="' + val + '" placeholder="__:00" autocomplete="off" style="text-align:center;max-width:90px">';
         if (saved && !correct) html += '<div style="font-size:11px;color:#A32D2D;margin-top:3px">Answer: ' + c.answer + '</div>';
         html += '</div>';
