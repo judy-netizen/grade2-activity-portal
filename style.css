@@ -177,10 +177,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .day-focus-tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;background:var(--surface);color:var(--muted);margin-bottom:6px}
 .day-check{font-size:12px;font-weight:500;color:#3B6D11}
 .day-check.in-prog{color:#854F0B}
-.activity-nav{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.back-to-days{padding:7px 14px;border:0.5px solid var(--border);border-radius:var(--radius-sm);background:transparent;cursor:pointer;font-size:13px;color:var(--muted)}
+.activity-nav{display:flex;align-items:center;gap:10px;margin-bottom:16px;justify-content:space-between}
+.activity-day-title{font-size:14px;font-weight:500;color:var(--text);flex:1;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.back-to-days{padding:7px 14px;border:0.5px solid var(--border);border-radius:var(--radius-sm);background:transparent;cursor:pointer;font-size:13px;color:var(--muted);white-space:nowrap}
 .back-to-days:hover{background:var(--surface)}
-.activity-day-title{font-size:15px;font-weight:500;color:var(--text)}
 .match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .match-col{display:flex;flex-direction:column;gap:8px}
 .match-item{padding:10px 14px;border:0.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:14px;background:var(--surface);transition:border-color .1s}
@@ -215,3 +215,30 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 .retry-btn{padding:7px 14px;border:0.5px solid #F4C0D1;border-radius:var(--radius-sm);background:transparent;cursor:pointer;font-size:13px;font-weight:500;color:#993556;transition:background .15s}
 .retry-btn:hover{background:#FBEAF0}
+
+.clock-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:16px}
+.clock-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center}
+.clock-num{font-size:11px;font-weight:500;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.clock-face{font-size:36px;margin-bottom:6px}
+.clock-hint{font-size:11px;color:var(--muted);margin-bottom:8px;line-height:1.4}
+.word-bank-box{background:var(--amber-bg);border:0.5px solid var(--amber);border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;color:var(--amber-text);margin-bottom:14px;line-height:1.7}
+.jumble-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:4px}
+.jumble-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.jumble-scrambled{font-size:16px;font-weight:500;letter-spacing:3px;color:var(--blue);min-width:90px;background:var(--blue-bg);padding:6px 12px;border-radius:var(--radius-sm);text-align:center}
+.jumble-arrow{font-size:16px;color:var(--muted)}
+
+.tag.sci-tag{background:#E8F4FB;color:#0C6E8F}
+.stab.sci-tab{border-color:#0C6E8F;color:#0C6E8F}
+.stab.sci-tab.active{background:#0C6E8F;color:white;border-color:#0C6E8F}
+.sci-match-area{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.sci-col{display:flex;flex-direction:column;gap:7px}
+.sci-col-label{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.sci-planet-btn{padding:9px 12px;border:0.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:13px;font-weight:500;background:var(--surface);transition:all .15s;line-height:1.4}
+.sci-planet-btn:hover{border-color:rgba(0,0,0,.25)}
+.sci-planet-btn.sci-selected{border-color:#185FA5;background:var(--blue-bg);color:var(--blue-text)}
+.sci-planet-btn.sci-correct{border-color:#3B6D11;background:var(--green-bg);color:var(--green-text)}
+.sci-planet-btn.sci-wrong{border-color:#A32D2D;background:#FCEBEB;color:#791F1F}
+.sci-desc-btn{padding:9px 12px;border:0.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:12px;background:var(--surface);transition:all .15s;line-height:1.5}
+.sci-desc-btn:hover{border-color:rgba(0,0,0,.25);background:#E8F4FB}
+.sci-match-result{font-size:10px;margin-top:3px;opacity:.8}
+@media(max-width:480px){.sci-match-area{grid-template-columns:1fr}}

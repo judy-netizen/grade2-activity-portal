@@ -28,6 +28,7 @@
       <button class="stab" data-s="math" onclick="showAct('math',this)">🔢 Math</button>
       <button class="stab" data-s="filipino" onclick="showAct('filipino',this)">🇵🇭 Filipino</button>
       <button class="stab" data-s="spelling" onclick="showAct('spelling',this)">✏️ Spelling</button>
+      <button class="stab sci-tab hidden" data-s="science" id="sci-tab-btn" onclick="showAct('science',this)">🔭 Science</button>
     </div>
     <div id="act-content"></div>
   </div>
@@ -85,6 +86,10 @@ function startDay(dayNum, weekKey) {
   document.getElementById('day-picker-screen').classList.add('hidden');
   document.getElementById('activity-screen').classList.remove('hidden');
   document.getElementById('activity-day-title').textContent = 'Day ' + dayNum + ' — ' + currentDay.title;
+  // Show science tab only if this day has science
+  var sciBtn = document.getElementById('sci-tab-btn');
+  if (currentDay.science) { sciBtn.classList.remove('hidden'); }
+  else { sciBtn.classList.add('hidden'); }
   showAct('english', document.querySelector('.stab[data-s="english"]'));
 }
 
@@ -156,6 +161,14 @@ function renderActivity(subject) {
         html += '<div class="q-section-label">3. How would you solve the baker\'s problem?</div>';
         html += '<div class="q-block"><textarea class="text-area-input" id="open-answer" placeholder="Write your answer here..." rows="3">' + (saved && saved.openAnswer ? saved.openAnswer : '') + '</textarea></div>';
       }
+      if (data.open_questions) {
+        html += '<div class="q-section-label">Open Questions — Write your answer</div>';
+        data.open_questions.forEach(function(oq, oi) {
+          var savedVal = saved && saved.openAnswers ? (saved.openAnswers[oi] || '') : '';
+          html += '<div class="q-block"><div class="q-text">' + (oi+1) + '. ' + oq.q + '</div>';
+          html += '<textarea class="text-area-input" id="oq' + oi + '" placeholder="Write your answer here..." rows="3">' + savedVal + '</textarea></div>';
+        });
+      }
       html += '<button class="submit-btn" onclick="submitEng()">Submit English ✓</button>';
       if (saved) html += '<div class="feedback-box show ' + (saved.pct >= 60 ? 'fb-good' : 'fb-low') + '">' + saved.msg + '</div>';
       else html += '<div class="feedback-box" id="eng-fb"></div>';
@@ -184,19 +197,41 @@ function renderActivity(subject) {
 
   if (subject === 'math') {
     html += '<div class="act-card">';
-    html += '<div class="act-header"><span class="tag green">Math</span> Word Problems</div>';
-    if (data.context) html += '<div class="story-box" style="margin-bottom:16px">' + data.context + '</div>';
-    data.problems.forEach(function(p, pi) {
-      var val = saved && saved.answers ? saved.answers[pi] : '';
-      var inp_cls = saved ? (parseInt(val) === p.a ? 'num-input correct-inp' : 'num-input wrong-inp') : 'num-input';
-      html += '<div class="q-block"><div class="q-text">' + p.q + '</div>';
-      html += '<input class="' + inp_cls + '" type="number" id="mq' + pi + '" value="' + val + '" placeholder="?" min="0">';
-      if (saved && parseInt(val) !== p.a) html += '<div style="font-size:12px;color:#A32D2D;margin-top:4px">Answer: ' + p.a + '</div>';
+    if (data.type === 'telling_time') {
+      html += '<div class="act-header"><span class="tag green">Math</span> Telling Time — Whole Hours</div>';
+      html += '<p class="act-instruction">' + data.instruction + '</p>';
+      html += '<div class="clock-grid">';
+      data.clocks.forEach(function(c, ci) {
+        var val = saved && saved.answers ? (saved.answers[ci] || '') : '';
+        var correct = val === c.answer;
+        var inp_cls = saved ? (correct ? 'text-input correct-inp' : 'text-input wrong-inp') : 'text-input';
+        html += '<div class="clock-card">';
+        html += '<div class="clock-num">Clock ' + c.num + '</div>';
+        html += '<div class="clock-face" id="cf' + ci + '"></div>';
+        html += '<div class="clock-hint">' + c.hint + '</div>';
+        html += '<input class="' + inp_cls + '" id="tc' + ci + '" value="' + val + '" placeholder="__:00" autocomplete="off" style="text-align:center;max-width:90px">';
+        if (saved && !correct) html += '<div style="font-size:11px;color:#A32D2D;margin-top:3px">Answer: ' + c.answer + '</div>';
+        html += '</div>';
+      });
       html += '</div>';
-    });
-    html += '<button class="submit-btn" onclick="submitMath()">Submit Math ✓</button>';
-    if (saved) html += '<div class="feedback-box show ' + (saved.pct >= 60 ? 'fb-good' : 'fb-low') + '">' + saved.msg + '</div>';
-    else html += '<div class="feedback-box" id="math-fb"></div>';
+      html += '<button class="submit-btn" onclick="submitMath()">Check answers ✓</button>';
+      if (saved) html += '<div class="feedback-box show ' + (saved.pct >= 60 ? 'fb-good' : 'fb-low') + '">' + saved.msg + '</div>';
+      else html += '<div class="feedback-box" id="math-fb"></div>';
+    } else {
+      html += '<div class="act-header"><span class="tag green">Math</span> Word Problems</div>';
+      if (data.context) html += '<div class="story-box" style="margin-bottom:16px">' + data.context + '</div>';
+      data.problems.forEach(function(p, pi) {
+        var val = saved && saved.answers ? saved.answers[pi] : '';
+        var inp_cls = saved ? (parseInt(val) === p.a ? 'num-input correct-inp' : 'num-input wrong-inp') : 'num-input';
+        html += '<div class="q-block"><div class="q-text">' + p.q + '</div>';
+        html += '<input class="' + inp_cls + '" type="number" id="mq' + pi + '" value="' + val + '" placeholder="?" min="0">';
+        if (saved && parseInt(val) !== p.a) html += '<div style="font-size:12px;color:#A32D2D;margin-top:4px">Answer: ' + p.a + '</div>';
+        html += '</div>';
+      });
+      html += '<button class="submit-btn" onclick="submitMath()">Submit Math ✓</button>';
+      if (saved) html += '<div class="feedback-box show ' + (saved.pct >= 60 ? 'fb-good' : 'fb-low') + '">' + saved.msg + '</div>';
+      else html += '<div class="feedback-box" id="math-fb"></div>';
+    }
     html += '</div>';
   }
 
@@ -269,6 +304,23 @@ function renderActivity(subject) {
         html += '</div>';
       });
       html += '</div>';
+    } else if (data.type === 'jumbled') {
+      html += '<div class="act-header"><span class="tag amber">Spelling</span> Jumbled Words</div>';
+      html += '<p class="act-instruction">' + data.instruction + '</p>';
+      html += '<div class="word-bank-box">📚 Word Bank: <strong>' + data.word_bank.join(', ') + '</strong></div>';
+      html += '<div class="jumble-grid">';
+      data.words.forEach(function(w, wi) {
+        var val = saved && saved.answers ? (saved.answers[wi] || '') : '';
+        var correct = val.toUpperCase() === w.answer;
+        var inp_cls = saved ? (correct ? 'text-input correct-inp' : 'text-input wrong-inp') : 'text-input';
+        html += '<div class="jumble-row">';
+        html += '<div class="jumble-scrambled">' + w.jumbled + '</div>';
+        html += '<div class="jumble-arrow">→</div>';
+        html += '<input class="' + inp_cls + ' upper" id="jw' + wi + '" value="' + val + '" placeholder="Unscramble..." autocomplete="off">';
+        if (saved && !correct) html += '<div style="font-size:11px;color:#A32D2D;margin-top:3px">Answer: ' + w.answer + '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
     } else {
       html += '<div class="act-header"><span class="tag amber">Spelling</span> Spell the Word</div>';
       html += '<p class="act-instruction">Look at the clue and type the correct spelling.</p>';
@@ -287,9 +339,39 @@ function renderActivity(subject) {
     html += '</div>';
   }
 
+  if (subject === 'science' && currentDay.science) {
+    var sci = currentDay.science;
+    var sciSaved = JSON.parse(localStorage.getItem('day' + currentDay.day + '_science') || 'null');
+    html += '<div class="act-card">';
+    html += '<div class="act-header"><span class="tag sci-tag">🔭 Science</span> Planet Facts — Matching</div>';
+    html += '<p class="act-instruction">' + sci.instruction + '</p>';
+    html += '<div class="sci-match-area">';
+    // Planets column
+    html += '<div class="sci-col"><div class="sci-col-label">🪐 Planets</div>';
+    sci.pairs.forEach(function(p, pi) {
+      var matched = sciSaved && sciSaved.pairs && sciSaved.pairs[pi];
+      var correct = matched === p.description;
+      var cls = 'sci-planet-btn' + (matched ? (correct ? ' sci-correct' : ' sci-wrong') : '');
+      html += '<div class="' + cls + '" id="spi' + pi + '" onclick="selectSciPlanet(' + pi + ')">' + p.planet + (matched ? '<div class="sci-match-result">' + (correct ? '✓' : '✗') + ' ' + matched + '</div>' : '') + '</div>';
+    });
+    html += '</div>';
+    // Descriptions column (shuffled display)
+    var shuffled = sci.pairs.slice().sort(function() { return Math.random() - 0.5; });
+    html += '<div class="sci-col"><div class="sci-col-label">📋 Descriptions</div>';
+    shuffled.forEach(function(p, si) {
+      html += '<div class="sci-desc-btn" id="sdi' + si + '" data-desc="' + p.description.replace(/"/g,'&quot;') + '" onclick="selectSciDesc(this,' + si + ')">' + p.description + '</div>';
+    });
+    html += '</div></div>';
+    html += '<button class="submit-btn" onclick="submitScience()">Check answers ✓</button>';
+    if (sciSaved) html += '<div class="feedback-box show ' + (sciSaved.pct >= 60 ? 'fb-good' : 'fb-low') + '">' + sciSaved.msg + '</div>';
+    else html += '<div class="feedback-box" id="sci-fb"></div>';
+    html += '</div>';
+  }
+
   document.getElementById('act-content').innerHTML = html;
   state.engPicks = {}; state.fillSlots = {}; state.fillActive = null;
   state.filPicks = {}; state.matchSel = null; state.matchPairs = {};
+  state.sciSelPlanet = null; state.sciPairs = {};
 }
 
 function pickEng(qi, oi, el) {
@@ -315,18 +397,20 @@ function submitEng() {
   var fillBlanks = null;
   if (data.fill_blanks) {
     fillBlanks = {};
-    data.fill_blanks.forEach(function(fb, fbi) {
-      fillBlanks[fbi] = fb.words;
-      var fbSc = fb.words.length;
-      sc += fbSc; data.questions.length;
-    });
+    data.fill_blanks.forEach(function(fb, fbi) { fillBlanks[fbi] = fb.words; });
   }
   var openAnswer = document.getElementById('open-answer') ? document.getElementById('open-answer').value : '';
-  var total = data.questions.length + (data.fill_blanks ? data.fill_blanks.reduce(function(a,fb){return a+fb.words.length;},0) : 0);
+  var openAnswers = {};
+  if (data.open_questions) {
+    data.open_questions.forEach(function(oq, oi) {
+      var el = document.getElementById('oq' + oi);
+      if (el) openAnswers[oi] = el.value;
+    });
+  }
   var msg = makeFeedback(sc, data.questions.length);
   var pct = Math.round(sc / data.questions.length * 100);
   showFB('eng-fb', msg, pct);
-  saveActivityScore('english', sc, data.questions.length, msg, pct, {picks: state.engPicks, fillBlanks: fillBlanks, openAnswer: openAnswer});
+  saveActivityScore('english', sc, data.questions.length, msg, pct, {picks: state.engPicks, fillBlanks: fillBlanks, openAnswer: openAnswer, openAnswers: openAnswers});
 }
 
 function selectFillWord(word) {
@@ -369,17 +453,31 @@ function submitFill() {
 function submitMath() {
   var data = currentDay.math;
   var sc = 0; var answers = {};
-  data.problems.forEach(function(p, pi) {
-    var inp = document.getElementById('mq' + pi);
-    var val = parseInt(inp.value);
-    answers[pi] = val;
-    if (val === p.a) { sc++; inp.classList.add('correct-inp'); inp.classList.remove('wrong-inp'); }
-    else { inp.classList.add('wrong-inp'); inp.classList.remove('correct-inp'); }
-  });
-  var msg = makeFeedback(sc, data.problems.length);
-  var pct = Math.round(sc / data.problems.length * 100);
-  showFB('math-fb', msg, pct);
-  saveActivityScore('math', sc, data.problems.length, msg, pct, {answers: answers});
+  if (data.type === 'telling_time') {
+    data.clocks.forEach(function(c, ci) {
+      var inp = document.getElementById('tc' + ci);
+      var val = inp ? inp.value.trim() : '';
+      answers[ci] = val;
+      if (val === c.answer) { sc++; if(inp) inp.classList.add('correct-inp'); }
+      else { if(inp) inp.classList.add('wrong-inp'); }
+    });
+    var msg = makeFeedback(sc, data.clocks.length);
+    var pct = Math.round(sc / data.clocks.length * 100);
+    showFB('math-fb', msg, pct);
+    saveActivityScore('math', sc, data.clocks.length, msg, pct, {answers: answers});
+  } else {
+    data.problems.forEach(function(p, pi) {
+      var inp = document.getElementById('mq' + pi);
+      var val = parseInt(inp.value);
+      answers[pi] = val;
+      if (val === p.a) { sc++; inp.classList.add('correct-inp'); inp.classList.remove('wrong-inp'); }
+      else { inp.classList.add('wrong-inp'); inp.classList.remove('correct-inp'); }
+    });
+    var msg = makeFeedback(sc, data.problems.length);
+    var pct = Math.round(sc / data.problems.length * 100);
+    showFB('math-fb', msg, pct);
+    saveActivityScore('math', sc, data.problems.length, msg, pct, {answers: answers});
+  }
 }
 
 function pickFil(qi, oi, el) {
@@ -456,6 +554,18 @@ function submitSpell() {
     showFB('spell-fb', msg, pct);
     saveActivityScore('spelling', sc, data.words.length, msg, pct, {answers: answers});
     renderActivity('spelling');
+  } else if (data.type === 'jumbled') {
+    data.words.forEach(function(w, wi) {
+      var inp = document.getElementById('jw' + wi);
+      var val = inp ? inp.value.trim().toUpperCase() : '';
+      answers[wi] = val;
+      if (val === w.answer) { sc++; if(inp) inp.classList.add('correct-inp'); }
+      else { if(inp) inp.classList.add('wrong-inp'); }
+    });
+    var msg = makeFeedback(sc, data.words.length);
+    var pct = Math.round(sc / data.words.length * 100);
+    showFB('spell-fb', msg, pct);
+    saveActivityScore('spelling', sc, data.words.length, msg, pct, {answers: answers});
   } else {
     data.words.forEach(function(w, wi) {
       var inp = document.getElementById('sw' + wi);
@@ -471,7 +581,46 @@ function submitSpell() {
   }
 }
 
-function makeFeedback(sc, total) {
+function selectSciPlanet(pi) {
+  document.querySelectorAll('.sci-planet-btn').forEach(function(el) { el.classList.remove('sci-selected'); });
+  document.getElementById('spi' + pi).classList.add('sci-selected');
+  state.sciSelPlanet = pi;
+}
+
+function selectSciDesc(el, si) {
+  if (state.sciSelPlanet === null) return;
+  if (!state.sciPairs) state.sciPairs = {};
+  var desc = el.getAttribute('data-desc');
+  state.sciPairs[state.sciSelPlanet] = desc;
+  // Visual feedback
+  document.querySelectorAll('.sci-planet-btn').forEach(function(e) { e.classList.remove('sci-selected'); });
+  var planetEl = document.getElementById('spi' + state.sciSelPlanet);
+  if (planetEl) { planetEl.style.borderColor = '#185FA5'; planetEl.style.background = '#E6F1FB'; }
+  el.style.opacity = '0.4'; el.style.pointerEvents = 'none';
+  state.sciSelPlanet = null;
+}
+
+function submitScience() {
+  var sci = currentDay.science;
+  var sc = 0;
+  sci.pairs.forEach(function(p, pi) {
+    var matched = state.sciPairs && state.sciPairs[pi];
+    if (matched === p.description) sc++;
+  });
+  var msg = makeFeedback(sc, sci.pairs.length);
+  var pct = Math.round(sc / sci.pairs.length * 100);
+  showFB('sci-fb', msg, pct);
+  // Save science score separately
+  var now = new Date();
+  var timeStr = now.toLocaleDateString('en-PH', {month:'short',day:'numeric'}) + ' ' + now.toLocaleTimeString('en-PH', {hour:'2-digit',minute:'2-digit'});
+  localStorage.setItem('day' + currentDay.day + '_science', JSON.stringify({score:sc, max:sci.pairs.length, msg:msg, pct:pct, pairs:state.sciPairs}));
+  localStorage.setItem('lastActivity', timeStr);
+  var history = JSON.parse(localStorage.getItem('activityHistory') || '[]');
+  history.push({subject:'Science', score:sc, max:sci.pairs.length, time:timeStr, day:currentDay.day, title:currentDay.title});
+  localStorage.setItem('activityHistory', JSON.stringify(history));
+}
+
+
   var pct = Math.round(sc / total * 100);
   if (pct === 100) return '🌟 Perfect score! Amazing work!';
   if (pct >= 75) return '😊 Great job! ' + sc + '/' + total + ' correct!';

@@ -61,39 +61,75 @@ var ACTIVITIES = {
         }
       },
       {
-        day: 2, title: "My Family",
+        day: 2, title: "Alien Money",
         focus: "Filipino",
         english: {
-          type: "fill_blank",
-          sentence_set: [
-            {sentence:"My ___ cooks food for us.", word:"mother", opts:["mother","school","tree"]},
-            {sentence:"My ___ goes to work every day.", word:"father", opts:["father","cat","book"]},
-            {sentence:"I love my ___.", word:"family", opts:["family","color","rain"]},
-            {sentence:"My sister and I are ___.", word:"siblings", opts:["siblings","animals","flowers"]}
+          type: "comprehension",
+          story: "👽 <strong>Alien Money</strong><br><br>Zander was hard at work growing food for himself and his neighbors. The food was floating, and as he walked by he looked at each plant, pointed his laser at it, and the laser gave the plant what it needed. That was the easy part. The hard part was how much walking he had to do!<br><br>He heard a knock at his door. It was his neighbor Jules. She was holding some cleaning products.<br><br>\"Hi, Zander. I just finished making some cleaning products. Do you need any?\" she asked.<br><br>\"Hi, Jules. I do. Can I get some cleaning spray? I can give you 4 breakfast plants for a bottle.\"<br><br>Jules said, \"I have enough breakfast plants for this week. How about 4 lunch plants?\"<br><br>\"They need a couple more hours to grow before I can give them to you. Is that OK?\" asked Zander.<br><br>Jules knew she could trust Zander, so she left the cleaning spray with him and went home. When Zander came by later with the plants, he said, \"I wish there was an easier way to get and give our items. Trading isn't always easy.\" Jules agreed. They went home thinking and wishing for a way to make their lives easier.",
+          questions: [
+            {q:"1. Who are the characters in the story?", opts:["Zander and Maya","Zander and Jules","Jules and Tommy"], a:1},
+            {q:"2. What does Jules trade with Zander?", opts:["Breakfast plants for soup","Cleaning spray for lunch plants","Laser tools for dinner plants"], a:1},
+            {q:"3. Why might Jules not want to leave her cleaning spray before getting the plants?", opts:["She needed it to clean her house","She worried the lunch plants would not grow as promised","She did not like Zander"], a:1},
+            {q:"4. Why did Jules leave the cleaning spray with Zander?", opts:["Because Zander paid her money","Because she trusted Zander to bring the plants later","Because she forgot it"], a:1},
+            {q:"5. How could Zander and Jules make trading easier?", opts:["By growing more plants","By using money instead of trading","By moving closer together"], a:1}
+          ],
+          open_questions: [
+            {q:"In your own words, what happens in the middle of the story?"},
+            {q:"How would it be easier for Zander and Jules to exchange items instead of trading?"}
           ]
         },
         math: {
-          type: "word_problems",
-          problems: [
-            {q:"👨‍👩‍👧 A family has 2 parents and 1 child. How many people?", a:3},
-            {q:"🎂 Lola bakes 10 cookies. She gives 4 to her grandchildren. How many left?", a:6},
-            {q:"🏠 There are 5 rooms in the house. 2 are bedrooms. How many other rooms?", a:3}
+          type: "telling_time",
+          instruction: "Look at each clock and type the correct time. Write it like this: 3:00",
+          clocks: [
+            {num:1, emoji:"🕖", hint:"The hour hand points to 7, minute hand to 12", answer:"7:00"},
+            {num:2, emoji:"🕑", hint:"The hour hand points to 2, minute hand to 12", answer:"2:00"},
+            {num:3, emoji:"🕕", hint:"The hour hand points to 6, minute hand to 12", answer:"6:00"},
+            {num:4, emoji:"🕚", hint:"The hour hand points to 11, minute hand to 12", answer:"11:00"},
+            {num:5, emoji:"🕐", hint:"The hour hand points to 1, minute hand to 12", answer:"1:00"},
+            {num:6, emoji:"🕗", hint:"The hour hand points to 8, minute hand to 12", answer:"8:00"},
+            {num:7, emoji:"🕓", hint:"The hour hand points to 4, minute hand to 12", answer:"4:00"},
+            {num:8, emoji:"🕔", hint:"The hour hand points to 5, minute hand to 12", answer:"5:00"},
+            {num:9, emoji:"🕒", hint:"The hour hand points to 3, minute hand to 12", answer:"3:00"}
           ]
         },
         filipino: {
-          type: "multiple_choice",
+          type: "comprehension",
+          story: "🌹 <strong>Rosas</strong><br><br>Tuwing umaga, magkasamang namimitas ng mga rosa ang mag-pinsan na si Ana at Anabelle. Kulay pulang rosa ang pinipitas nila. Tanim ito ni Nanay Linda. Bukod sa hilig nila ang mamitas ng rosas, ibinebenta rin nila ito sa pamilihan. Paborito ito ng mga mamamili dahil sa taglay na ganda at bango ng mga rosas.",
+          instruction: "Basahin ang talata. Piliin ang tamang sagot sa bawat tanong.",
           questions: [
-            {q:"Sino ang ama sa pamilya?", opts:["Nanay","Tatay","Lola"], a:1},
-            {q:"Sino ang ina sa pamilya?", opts:["Tatay","Lolo","Nanay"], a:2},
-            {q:"Ano ang tawag sa anak ng iyong tiya?", opts:["Kapatid","Pinsan","Kaibigan"], a:1}
+            {q:"1. Sino ang mag-pinsan?", opts:["Karol at Karolina","Maya at Aya","Ana at Anabelle"], a:2},
+            {q:"2. Ano ang ginagawa nila?", opts:["Nanghuhuli ng paru-paro","Nagtatanim","Namimitas ng mga rosas"], a:2},
+            {q:"3. Ano ang ginagawa nila dito?", opts:["Itinatanim","Ireregalo","Binebenta"], a:2}
           ]
         },
         spelling: {
+          type: "jumbled",
+          instruction: "Unscramble the letters to make the correct word. Use the word bank to help you!",
+          word_bank: ["about","stairs","break","whale","bother","silly","grab","car"],
           words: [
-            {clue:"👨", hint:"Your male parent", answer:"father"},
-            {clue:"👩", hint:"Your female parent", answer:"mother"},
-            {clue:"👧", hint:"A female child", answer:"girl"},
-            {clue:"👦", hint:"A male child", answer:"boy"}
+            {jumbled:"SRIATS", answer:"STAIRS"},
+            {jumbled:"ELAHW", answer:"WHALE"},
+            {jumbled:"RAC", answer:"CAR"},
+            {jumbled:"REHTOB", answer:"BOTHER"},
+            {jumbled:"YLLIS", answer:"SILLY"},
+            {jumbled:"TUOBA", answer:"ABOUT"},
+            {jumbled:"KAERB", answer:"BREAK"},
+            {jumbled:"BARG", answer:"GRAB"}
+          ]
+        },
+        science: {
+          type: "matching",
+          instruction: "Match each planet to its correct description. Tap a planet, then tap its description!",
+          pairs: [
+            {planet:"🟤 Mercury", emoji:"🟤", description:"The smallest planet in our solar system"},
+            {planet:"🟡 Venus",   emoji:"🟡", description:"The hottest planet"},
+            {planet:"🌍 Earth",   emoji:"🌍", description:"Where we live"},
+            {planet:"🔴 Mars",    emoji:"🔴", description:"Known as the \"red planet\""},
+            {planet:"🟠 Jupiter", emoji:"🟠", description:"The largest planet in our solar system"},
+            {planet:"💛 Saturn",  emoji:"💛", description:"Has seven rings and at least 60 moons"},
+            {planet:"🔵 Uranus",  emoji:"🔵", description:"An \"ice giant\" that spins on its side"},
+            {planet:"🫧 Neptune", emoji:"🫧", description:"The windiest planet with winds up to 1,200 mph"}
           ]
         }
       },
