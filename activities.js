@@ -125,10 +125,10 @@ var ACTIVITIES = {
             {planet:"🟤 Mercury", emoji:"🟤", description:"The smallest planet in our solar system"},
             {planet:"🟡 Venus",   emoji:"🟡", description:"The hottest planet"},
             {planet:"🌍 Earth",   emoji:"🌍", description:"Where we live"},
-            {planet:"🔴 Mars",    emoji:"🔴", description:"Known as the \"red planet\""},
+            {planet:"🔴 Mars",    emoji:"🔴", description:"Known as the red planet"},
             {planet:"🟠 Jupiter", emoji:"🟠", description:"The largest planet in our solar system"},
             {planet:"💛 Saturn",  emoji:"💛", description:"Has seven rings and at least 60 moons"},
-            {planet:"🔵 Uranus",  emoji:"🔵", description:"An \"ice giant\" that spins on its side"},
+            {planet:"🔵 Uranus",  emoji:"🔵", description:"An ice giant that spins on its side"},
             {planet:"🫧 Neptune", emoji:"🫧", description:"The windiest planet with winds up to 1,200 mph"}
           ]
         }
